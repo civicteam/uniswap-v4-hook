@@ -1,34 +1,48 @@
 # Foundry Template [![Open in Gitpod][gitpod-badge]][gitpod] [![Github Actions][gha-badge]][gha] [![Foundry][foundry-badge]][foundry] [![License: MIT][license-badge]][license]
 
-[gitpod]: https://gitpod.io/#https://github.com/PaulRBerg/foundry-template
+[gitpod]: https://gitpod.io/#https://github.com/soliditylabs/uniswap-v4-custom-pool
 [gitpod-badge]: https://img.shields.io/badge/Gitpod-Open%20in%20Gitpod-FFB45B?logo=gitpod
-[gha]: https://github.com/PaulRBerg/foundry-template/actions
-[gha-badge]: https://github.com/PaulRBerg/foundry-template/actions/workflows/ci.yml/badge.svg
+[gha]: https://github.com/soliditylabs/uniswap-v4-custom-pool/actions
+[gha-badge]: https://github.com/soliditylabs/uniswap-v4-custom-pool/actions/workflows/ci.yml/badge.svg
 [foundry]: https://getfoundry.sh/
 [foundry-badge]: https://img.shields.io/badge/Built%20with-Foundry-FFDB1C.svg
 [license]: https://opensource.org/licenses/MIT
 [license-badge]: https://img.shields.io/badge/License-MIT-blue.svg
 
-A Foundry-based template for developing Solidity smart contracts, with sensible defaults.
+Uniswap v4 custom pool template for Foundry based on [foundry-template](https://github.com/PaulRBerg/foundry-template).
+
+Full blog post with more details about Uniswap 4 and hooks available at
+[https://soliditydeveloper.com/uniswap4](https://soliditydeveloper.com/uniswap4).
+
+An example for the flow of hooks is shown below:
+
+<img width="883" alt="image" src="https://github.com/soliditylabs/uniswap-v4-custom-pool/assets/659390/bdce944f-f085-4dc9-b8df-c1cd1811d795">
+
+The flags for which hooks will be executed depends the leading bits on the Hooks address:
+
+![UniHookBits](https://github.com/soliditylabs/uniswap-v4-custom-pool/assets/659390/33ecc26a-67da-4d4c-accc-0255ea7e41df)
 
 ## What's Inside
 
+- [Uniswap v4](https://github.com/Uniswap/v4-core): Examples showing how to create custom hooks for Uniswap v4
+- [Foundry-Template](https://github.com/PaulRBerg/foundry-template): Foundry-based template for developing Solidity
+  smart contracts by Paul Berg
 - [Forge](https://github.com/foundry-rs/foundry/blob/master/forge): compile, test, fuzz, format, and deploy smart
   contracts
-- [Forge Std](https://github.com/foundry-rs/forge-std): collection of helpful contracts and cheatcodes for testing
+- [Forge Std](https://github.com/foundry-rs/forge-std): collection of helpful contracts and cheat codes for testing
 - [PRBTest](https://github.com/PaulRBerg/prb-test): modern collection of testing assertions and logging utilities
 - [Prettier](https://github.com/prettier/prettier): code formatter for non-Solidity files
 - [Solhint Community](https://github.com/solhint-community/solhint-community): linter for Solidity code
 
 ## Getting Started
 
-Click the [`Use this template`](https://github.com/PaulRBerg/foundry-template/generate) button at the top of the page to
-create a new repository with this repo as the initial state.
+Click the [`Use this template`](https://github.com/soliditylabs/uniswap-v4-custom-pool/generate) button at the top of
+the page to create a new repository with this repo as the initial state.
 
 Or, if you prefer to install the template manually:
 
 ```sh
-forge init my-project --template https://github.com/PaulRBerg/foundry-template
+forge init my-project --template https://github.com/soliditylabs/uniswap-v4-custom-pool
 cd my-project
 pnpm install # install Solhint, Prettier, and other Node.js deps
 ```
