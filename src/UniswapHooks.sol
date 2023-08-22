@@ -7,11 +7,14 @@ import {
 import { IHookFeeManager } from "@uniswap/v4-core/contracts/interfaces/IHookFeeManager.sol";
 import { IDynamicFeeManager } from "@uniswap/v4-core/contracts/interfaces/IDynamicFeeManager.sol";
 import { console2 } from "forge-std/console2.sol";
+import "@gateway/contracts/Gated.sol";
 
-contract UniswapHooks is BaseHook, IHookFeeManager, IDynamicFeeManager {
+contract UniswapHooks is BaseHook, IHookFeeManager, IDynamicFeeManager, Gated {
     address public owner;
+    address public constant GATEWAY_TOKEN_CONTRACT = 0xF65b6396dF6B7e2D8a6270E3AB6c7BB08BAEF22E;
+    uint public constant GATEKEEPER_NETWORK = 4;
 
-    constructor(address _owner, IPoolManager _poolManager) BaseHook(_poolManager) {
+    constructor(address _owner, IPoolManager _poolManager) BaseHook(_poolManager) Gated(GATEWAY_TOKEN_CONTRACT, GATEKEEPER_NETWORK) {
         owner = _owner;
     }
 
@@ -96,8 +99,9 @@ contract UniswapHooks is BaseHook, IHookFeeManager, IDynamicFeeManager {
         IPoolManager.PoolKey calldata, // key
         IPoolManager.SwapParams calldata // params
     )
+        gated
         external
-        pure
+        view
         override
         returns (bytes4)
     {
