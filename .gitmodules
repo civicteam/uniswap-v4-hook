@@ -18,3 +18,6 @@
 [submodule "lib/erc-3525"]
 	path = lib/erc-3525
 	url = https://github.com/solv-finance/erc-3525
+[submodule "lib/on-chain-identity-gateway"]
+	path = lib/on-chain-identity-gateway
+	url = https://github.com/identity-com/on-chain-identity-gateway
