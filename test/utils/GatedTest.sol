@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+pragma solidity >=0.8.19;
+
 import { PRBTest } from "@prb/test/PRBTest.sol";
 import "@gateway/contracts/GatewayToken.sol";
 import "@gateway/contracts/FlagsStorage.sol";
