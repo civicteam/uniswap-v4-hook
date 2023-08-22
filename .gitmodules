@@ -12,3 +12,6 @@
 [submodule "lib/on-chain-identity-gateway"]
 	path = lib/on-chain-identity-gateway
 	url = https://github.com/identity-com/on-chain-identity-gateway
+[submodule "lib/openzeppelin-contracts"]
+	path = lib/openzeppelin-contracts
+	url = https://github.com/openzeppelin/openzeppelin-contracts
