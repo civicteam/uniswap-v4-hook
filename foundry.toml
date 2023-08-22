@@ -13,7 +13,9 @@
   optimizer_runs = 10_000
   out = "out"
   remappings = [
-    "@gateway/=lib/on-chain-identity-gateway/ethereum/smart-contract/"
+    "@gateway/=lib/on-chain-identity-gateway/ethereum/smart-contract/",
+    "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+    "@openzeppelin/contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/",
   ]
   script = "script"
   solc = "0.8.19"

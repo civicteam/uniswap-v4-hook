@@ -15,17 +15,19 @@ import {
 } from "@uniswap-periphery/v4-periphery/contracts/BaseHook.sol";
 
 import { UniswapHooksFactory } from "../src/UniswapHooksFactory.sol";
+import "./utils/GatedTest.sol";
 
-using CurrencyLibrary for Currency;
+    using CurrencyLibrary for Currency;
 
-contract UniswapHooksTest is PRBTest, StdCheats {
+contract UniswapHooksTest is GatedTest, StdCheats {
     UniswapHooksFactory internal uniswapHooksFactory;
     TestERC20 internal token1;
     TestERC20 internal token2;
     IHooks internal deployedHooks;
     IPoolManager internal poolManager;
 
-    function setUp() public virtual {
+    function setUp() public override {
+        super.setUp();
         uniswapHooksFactory = new UniswapHooksFactory();
     }
 
