@@ -45,3 +45,11 @@ to check the user's pass status.
   - Once the Civic Pass verification is successful, the trade is executed within the Uniswap v4 environment.
   - All trades are recorded on-chain ensuring transparency and compliance.
 
+## Entities
+
+![Entities](doc/er.png)
+
+## Flow Diagram
+
+![Flow Diagram](doc/flow.png)
+
