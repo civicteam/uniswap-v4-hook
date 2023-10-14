@@ -7,15 +7,25 @@ import {
 import { IHookFeeManager } from "@uniswap/v4-core/contracts/interfaces/IHookFeeManager.sol";
 import { IDynamicFeeManager } from "@uniswap/v4-core/contracts/interfaces/IDynamicFeeManager.sol";
 import { console2 } from "forge-std/console2.sol";
-import "@gateway/contracts/Gated.sol";
+import "@gateway/contracts/interfaces/IGatewayTokenVerifier.sol";
 
-contract UniswapHooks is BaseHook, IHookFeeManager, IDynamicFeeManager, Gated {
+contract UniswapHooks is BaseHook, IHookFeeManager, IDynamicFeeManager {
     address public owner;
-    address public constant GATEWAY_TOKEN_CONTRACT = 0xF65b6396dF6B7e2D8a6270E3AB6c7BB08BAEF22E;
-    uint public constant GATEKEEPER_NETWORK = 4;
+    address public gatewayTokenContract;
+    uint public gatekeeperNetwork;
 
-    constructor(address _owner, IPoolManager _poolManager) BaseHook(_poolManager) Gated(GATEWAY_TOKEN_CONTRACT, GATEKEEPER_NETWORK) {
+    constructor(address _owner, IPoolManager _poolManager, address _gatewayTokenContract, uint _gatekeeperNetwork) BaseHook(_poolManager) {
         owner = _owner;
+        gatewayTokenContract = _gatewayTokenContract;
+        gatekeeperNetwork = _gatekeeperNetwork;
+    }
+
+    modifier gated(address sender) {
+        IGatewayTokenVerifier verifier = IGatewayTokenVerifier(gatewayTokenContract);
+        if (!verifier.verifyToken(sender, gatekeeperNetwork)) {
+            revert("No pass");
+        }
+        _;
     }
 
     function getHooksCalls() public pure override returns (Hooks.Calls memory) {
@@ -79,7 +89,7 @@ contract UniswapHooks is BaseHook, IHookFeeManager, IDynamicFeeManager, Gated {
 
     /// @inheritdoc IHooks
     function afterModifyPosition(
-        address, // sender
+        address sender, // sender
         IPoolManager.PoolKey calldata, // key
         IPoolManager.ModifyPositionParams calldata, // params
         BalanceDelta // delta
@@ -90,16 +100,17 @@ contract UniswapHooks is BaseHook, IHookFeeManager, IDynamicFeeManager, Gated {
         returns (bytes4)
     {
         console2.log("afterModifyPosition");
+        console2.log("sender", sender);
         return IHooks.afterModifyPosition.selector;
     }
 
     /// @inheritdoc IHooks
     function beforeSwap(
-        address, // sender
+        address sender, // sender
         IPoolManager.PoolKey calldata, // key
         IPoolManager.SwapParams calldata // params
     )
-        gated
+        gated(sender)
         external
         view
         override

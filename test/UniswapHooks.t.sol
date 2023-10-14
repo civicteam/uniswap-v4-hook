@@ -5,7 +5,7 @@ import { PRBTest } from "@prb/test/PRBTest.sol";
 import { console2 } from "forge-std/console2.sol";
 import { StdCheats } from "forge-std/StdCheats.sol";
 
-import { PoolManager, Currency } from "@uniswap/v4-core/contracts/PoolManager.sol";
+    import { PoolManager, Currency } from "@uniswap/v4-core/contracts/PoolManager.sol";
 import { TickMath } from "@uniswap/v4-core/contracts/libraries/TickMath.sol";
 import { Fees } from "@uniswap/v4-core/contracts/libraries/Fees.sol";
 import { CurrencyLibrary } from "@uniswap/v4-core/contracts/libraries/CurrencyLibrary.sol";
@@ -29,21 +29,30 @@ contract UniswapHooksTest is GatedTest, StdCheats {
     function setUp() public override {
         super.setUp();
         uniswapHooksFactory = new UniswapHooksFactory();
+
+        vm.prank(gatekeeper);
+        console2.log("Issuing a pass to", address(this));
+        gatewayToken.mint(address(this), GATEKEEPER_NETWORK_SLOT_ID, 0, 0, nullCharge);
     }
 
     function test_Example() external {
+        console2.log("msg.sender");
+        console2.log(msg.sender);
+        console2.log("address(this)");
+        console2.log(address(this));
+//        vm.startPrank(userWithPass);
         address owner = 0x388C818CA8B9251b393131C08a736A67ccB19297;
         poolManager = IPoolManager(address(new PoolManager(type(uint256).max)));
 
         for (uint256 i = 0; i < 1500; i++) {
             bytes32 salt = bytes32(i);
-            address expectedAddress = uniswapHooksFactory.getPrecomputedHookAddress(owner, poolManager, salt);
+            address expectedAddress = uniswapHooksFactory.getPrecomputedHookAddress(owner, poolManager, salt, address(gatewayToken), GATEKEEPER_NETWORK_SLOT_ID);
 
             // 0xff = 11111111 = all hooks enabled
             if (_doesAddressStartWith(expectedAddress, 0xff)) {
                 console2.log("Found hook address", expectedAddress, "with salt of", i);
 
-                deployedHooks = IHooks(uniswapHooksFactory.deploy(owner, poolManager, salt));
+                deployedHooks = IHooks(uniswapHooksFactory.deploy(owner, poolManager, salt, address(gatewayToken), GATEKEEPER_NETWORK_SLOT_ID));
                 assertEq(address(deployedHooks), expectedAddress, "address is not as expected");
 
                 // Let's test all the hooks

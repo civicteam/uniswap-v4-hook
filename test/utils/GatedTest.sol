@@ -10,7 +10,8 @@ import "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 
 import "./GatewayUtils.sol";
 
-contract GatedTest is PRBTest {
+contract GatedTest is PRBTest, GatewayUtils {
+    uint public constant GATEKEEPER_NETWORK_SLOT_ID = 0;
     GatewayToken public gatewayToken;
 
     address public admin;
@@ -21,28 +22,25 @@ contract GatedTest is PRBTest {
     uint256 internal userWithPassPrivateKey;
     uint256 internal userWithoutPassPrivateKey;
 
+    Charge public nullCharge;
+
     function setUp() public virtual {
         string memory mnemonic = "test test test test test test test test test test test junk";
-        relayerPrivateKey = vm.deriveKey(mnemonic, 0);
-        userWithPassPrivateKey = vm.deriveKey(mnemonic, 1);
-        userWithoutPassPrivateKey = vm.deriveKey(mnemonic, 2);
+        userWithPassPrivateKey = vm.deriveKey(mnemonic, 0);
+        userWithoutPassPrivateKey = vm.deriveKey(mnemonic, 1);
 
         admin = vm.addr(1);
         userWithPass = vm.addr(userWithPassPrivateKey);
         userWithoutPass = vm.addr(userWithoutPassPrivateKey);
         gatekeeper = vm.addr(4);
-        relayer = vm.addr(relayerPrivateKey);
 
-        Charge memory nullCharge = makeNullCharge();
+        nullCharge = makeNullCharge();
 
         address flagsStorageProxy = deployFlagsStorage(admin);
         address gatewayTokenProxy = deployGatewayToken(admin, flagsStorageProxy);
 
         gatewayToken = GatewayToken(gatewayTokenProxy);
 
-        createGatekeeperNetwork(gatewayToken, 0, gatekeeper);
-
-        vm.prank(gatekeeper);
-        gatewayToken.mint(userWithPass, 0, 0, 0, nullCharge);
+        createGatekeeperNetwork(gatewayToken, GATEKEEPER_NETWORK_SLOT_ID, gatekeeper);
     }
 }
