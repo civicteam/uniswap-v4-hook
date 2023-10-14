@@ -9,7 +9,7 @@ import { IDynamicFeeManager } from "@uniswap/v4-core/contracts/interfaces/IDynam
 import { console2 } from "forge-std/console2.sol";
 import "@gateway/contracts/interfaces/IGatewayTokenVerifier.sol";
 
-contract UniswapHooks is BaseHook, IHookFeeManager, IDynamicFeeManager {
+contract GatewayHook is BaseHook, IHookFeeManager, IDynamicFeeManager {
     address public owner;
     address public gatewayTokenContract;
     uint public gatekeeperNetwork;

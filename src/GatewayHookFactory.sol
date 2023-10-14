@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.19;
 
-import { IPoolManager, UniswapHooks } from "./UniswapHooks.sol";
+import { IPoolManager, GatewayHook} from "./GatewayHook.sol";
 
-contract UniswapHooksFactory {
+contract GatewayHookFactory {
     function deploy(address owner, IPoolManager poolManager, bytes32 salt, address gatewayTokenContract, uint gatekeeperNetwork) external returns (address) {
-        return address(new UniswapHooks{salt: salt}(owner, poolManager, gatewayTokenContract, gatekeeperNetwork));
+        return address(new GatewayHook{salt: salt}(owner, poolManager, gatewayTokenContract, gatekeeperNetwork));
     }
 
     function getPrecomputedHookAddress(
@@ -20,7 +20,7 @@ contract UniswapHooksFactory {
         returns (address)
     {
         bytes32 bytecodeHash =
-            keccak256(abi.encodePacked(type(UniswapHooks).creationCode, abi.encode(owner, poolManager, gatewayTokenContract, gatekeeperNetwork)));
+            keccak256(abi.encodePacked(type(GatewayHook).creationCode, abi.encode(owner, poolManager, gatewayTokenContract, gatekeeperNetwork)));
         bytes32 hash = keccak256(abi.encodePacked(bytes1(0xff), address(this), salt, bytecodeHash));
         return address(uint160(uint256(hash)));
     }

@@ -14,13 +14,13 @@ import {
     IPoolManager, Hooks, IHooks, BaseHook, BalanceDelta
 } from "@uniswap-periphery/v4-periphery/contracts/BaseHook.sol";
 
-import { UniswapHooksFactory } from "../src/UniswapHooksFactory.sol";
+import {GatewayHookFactory} from "../src/GatewayHookFactory.sol";
 import "./utils/GatedTest.sol";
 
     using CurrencyLibrary for Currency;
 
-contract UniswapHooksTest is GatedTest, StdCheats {
-    UniswapHooksFactory internal uniswapHooksFactory;
+contract GatewayHookTest is GatedTest, StdCheats {
+    GatewayHookFactory internal gatewayHookFactory;
     TestERC20 internal token1;
     TestERC20 internal token2;
     IHooks internal deployedHooks;
@@ -28,7 +28,7 @@ contract UniswapHooksTest is GatedTest, StdCheats {
 
     function setUp() public override {
         super.setUp();
-        uniswapHooksFactory = new UniswapHooksFactory();
+        gatewayHookFactory = new GatewayHookFactory();
 
         vm.prank(gatekeeper);
         console2.log("Issuing a pass to", address(this));
@@ -46,13 +46,13 @@ contract UniswapHooksTest is GatedTest, StdCheats {
 
         for (uint256 i = 0; i < 1500; i++) {
             bytes32 salt = bytes32(i);
-            address expectedAddress = uniswapHooksFactory.getPrecomputedHookAddress(owner, poolManager, salt, address(gatewayToken), GATEKEEPER_NETWORK_SLOT_ID);
+            address expectedAddress = gatewayHookFactory.getPrecomputedHookAddress(owner, poolManager, salt, address(gatewayToken), GATEKEEPER_NETWORK_SLOT_ID);
 
             // 0xff = 11111111 = all hooks enabled
             if (_doesAddressStartWith(expectedAddress, 0xff)) {
                 console2.log("Found hook address", expectedAddress, "with salt of", i);
 
-                deployedHooks = IHooks(uniswapHooksFactory.deploy(owner, poolManager, salt, address(gatewayToken), GATEKEEPER_NETWORK_SLOT_ID));
+                deployedHooks = IHooks(gatewayHookFactory.deploy(owner, poolManager, salt, address(gatewayToken), GATEKEEPER_NETWORK_SLOT_ID));
                 assertEq(address(deployedHooks), expectedAddress, "address is not as expected");
 
                 // Let's test all the hooks
